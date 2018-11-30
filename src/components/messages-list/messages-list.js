@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { CollectionItem, Row, Col, Input, Icon } from 'react-materialize'
+import { CollectionItem, Row, Col, Input, Icon, Chip } from 'react-materialize'
 
 class MessagesList extends Component {
 
@@ -12,11 +12,11 @@ class MessagesList extends Component {
     return(
       <CollectionItem>
         <Row className='valign-wrapper'>
-          <Col s={1} m={1} l={1} xl={1}>
-            <Input name='group1' type='checkbox' label=" " checked={checkAll} />
+          <Col s={1} m={1} l={1} xl={1} >
+            <Input id={JSON.stringify(message.id)} name='group1' type='checkbox' label=" " checked={message.selected} onClick={(e)=>checkAll(e, message)} />
           </Col>
           <Col onClick={()=>starred(message.id)} s={1} m={1} l={1} xl={1}><Icon>{message.starred ? "star_border" : "star"}</Icon></Col>
-          <Col className="valign" style={truncate} s={10} m={10} l={10} xl={10}>{message.subject}</Col>
+          <Col className="valign" style={truncate} s={10} m={10} l={10} xl={10}>{message.labels ? message.labels.map((label, idx)=><Chip key={idx}>{label}</Chip>) : null}{message.read ? message.subject : <b>{message.subject}</b>}</Col>
         </Row>
       </CollectionItem>
     )

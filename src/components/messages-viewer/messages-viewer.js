@@ -4,28 +4,15 @@ import ViewerToolbar from '../viewer-toolbar/viewer-toolbar'
 import MessagesList from '../messages-list/messages-list'
 
 class MessagesViewer extends Component {
-  constructor(props){
-    super(props)
-    this.state = {
-      messages: [],
-      checked: false
-    }
-  }
-  // function checkAll
-  checkAll(){
-    this.setState({
-      ...this.state,
-      checked: document.getElementById('checkAll').checked
-    })
-  }
+
 
   render(){
-    const { messages, starred } = this.props
+    const { messages, starred, checkAll, addRemoveLabel, markReadUnread, deleteMessage } = this.props
     const labels = ['Dev', 'Personal']
     return(
       <Collection className="container messages-viewer">
         {/* Toolbar */}
-        <ViewerToolbar labels={labels} checkAll={this.checkAll.bind(this)} />
+        <ViewerToolbar deleteMessage={deleteMessage} markReadUnread={markReadUnread} addRemoveLabel={addRemoveLabel} messages={messages} labels={labels} checkAll={checkAll} />
         {/* single message view :: new message view */}
         {/* MessageWindow -- wrapper for both elements */}
         {/* MessageList -- will need to adjust styling */}
@@ -38,7 +25,7 @@ class MessagesViewer extends Component {
         </CollectionItem>
         {
           messages.map((message, idx)=>(
-            <MessagesList starred={starred} checkAll={this.state.checked} key={idx} message={message}/>
+            <MessagesList starred={starred} checkAll={checkAll} key={idx} message={message}/>
           ))
         }
       </Collection>
