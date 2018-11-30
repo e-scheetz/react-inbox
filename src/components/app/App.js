@@ -143,9 +143,43 @@ class App extends Component {
       ...this.state,
       messages: newState
     })
-
   }
 
+  setReading(ID){
+    const oldReading = this.state.messages.filter((message)=>message.reading)[0] || false
+    const newReading = this.state.messages.filter((message)=>message.id === ID)[0]
+    const remainder = this.state.messages.filter((message)=>message.id !== ID)
+    let newState = this.state.messages
+    if(oldReading){
+      oldReading.reading = false
+      newReading.reading = true
+      newState = [...remainder, newReading, oldReading].sort((a, b)=>{return a.id > b.id})
+    }else{
+      newReading.reading = true
+      newState = [...remainder, newReading].sort((a, b)=>{return a.id > b.id})
+    }
+    this.setState({
+      ...this.state,
+      messages: newState
+    })
+  }
+
+  dismissReading(){
+    const oldReading = this.state.messages.filter((message)=>message.reading)
+    const returnVal = oldReading.map((message)=>{
+      return {
+        ...message,
+        reading: false,
+        read: true
+      }
+    })
+    const remainder = this.state.messages.filter((message)=>!message.reading)
+    const newState = [...remainder, ...returnVal].sort((a, b)=>{return a.id > b.id})
+    this.setState({
+      ...this.state,
+      messages: newState
+    })
+  }
 
   render() {
     return (
@@ -153,7 +187,7 @@ class App extends Component {
         {/* want to add styling to header to force it to stay at the top of the page and if possible reduce it's size on scroll */}
         <Header/>
         {/* MessagesViewer will contain the majority of component imports so I can probably handle most of the api calls there */}
-        <MessagesViewer deleteMessage={this.deleteMessage.bind(this)} markReadUnread={this.markReadUnread.bind(this)} addRemoveLabel={this.addRemoveLabel.bind(this)} checkAll={this.checkAll.bind(this)} starred={this.starred.bind(this)} messages={this.state.messages} />
+        <MessagesViewer dismissReading={this.dismissReading.bind(this)} setReading={this.setReading.bind(this)} deleteMessage={this.deleteMessage.bind(this)} markReadUnread={this.markReadUnread.bind(this)} addRemoveLabel={this.addRemoveLabel.bind(this)} checkAll={this.checkAll.bind(this)} starred={this.starred.bind(this)} messages={this.state.messages} />
       </div>
     )
   }
