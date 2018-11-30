@@ -18,9 +18,13 @@ class App extends Component {
   }
 
   starred(ID){
-    const newState = [...this.state.messages.filter((message)=>(message.id !== ID)), this.state.messages.filter((message)=>(message.id === ID))[0]].sort((a, b)=>{return a.id > b.id})
-    // this.setState({messages: newState})
-    console.log(newState)
+    const changedVariable = this.state.messages.filter((message)=>(message.id === ID))[0]
+    changedVariable.starred = !changedVariable.starred
+    const remainingArr = this.state.messages.filter((message)=>(message.id !== ID))
+    const newState = [...remainingArr, changedVariable].sort((a, b)=>{return a.id > b.id})
+    // api patch
+    this.setState({messages: newState})
+    // console.log(newState)
   }
 
   render() {

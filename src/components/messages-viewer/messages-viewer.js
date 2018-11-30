@@ -31,7 +31,8 @@ class MessagesViewer extends Component {
         {/* MessageList -- will need to adjust styling */}
         <CollectionItem>
           <Row>
-            <Col s={2} m={2} l={2} xl={2}></Col>
+            <Col s={1} m={1} l={1} xl={1}>Select:</Col>
+            <Col s={1} m={1} l={1} xl={1}>Star:</Col>
             <Col s={10} m={10} l={10} xl={10}>Subject:</Col>
           </Row>
         </CollectionItem>
