@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { CollectionItem, Row, Col, Button, Input, Icon } from 'react-materialize'
+import { CollectionItem, Row, Col, Button, Input, Icon, Badge } from 'react-materialize'
 
 class ViewerToolbar extends Component{
   render(){
@@ -30,7 +30,7 @@ class ViewerToolbar extends Component{
             <Button onClick={()=>deleteMessage()} name='group2' waves='light'><Icon>delete</Icon></Button>
           </Col>
           <Col className='valign' s={1} m={1} l={1} xl={1}>
-            Unread: {messages.filter((message)=>message.read === false).length}
+            <Badge newIcon>{messages.filter((message)=>message.read === false).length}</Badge>
           </Col>
         </Row>
       </CollectionItem>

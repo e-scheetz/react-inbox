@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { CollectionItem, Row, Col, Input, Icon, Chip } from 'react-materialize'
+import './styles.css'
 
 class MessagesList extends Component {
 
@@ -9,8 +10,9 @@ class MessagesList extends Component {
       overflow: 'hidden',
       fontSize:'1.2em'
     }
+
     return(
-      <CollectionItem>
+      <CollectionItem className='collectionItem'>
         <Row className='valign-wrapper'>
           <Col s={1} m={1} l={1} xl={1} >
             <Input id={JSON.stringify(message.id)} name='group1' type='checkbox' label=" " checked={message.selected} onClick={(e)=>checkAll(e, message)} />
