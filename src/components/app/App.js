@@ -8,13 +8,17 @@ class App extends Component {
     super(props)
     this.state = {
       messages: [],
+      newMessage: false
     }
   }
 
   async componentDidMount() {
     const response = await fetch('http://localhost:8082/api/messages')
     const json = await response.json()
-    this.setState({messages: json})
+    this.setState({
+      ...this.state,
+      messages: json
+    })
     this.checkedOrIndeterminate(this.state.messages)
   }
 
@@ -24,7 +28,10 @@ class App extends Component {
     const remainingArr = this.state.messages.filter((message)=>(message.id !== ID))
     const newState = [...remainingArr, changedVariable].sort((a, b)=>{return a.id > b.id})
     // api patch
-    this.setState({messages: newState})
+    this.setState({
+      ...this.state,
+      messages: newState
+    })
     // console.log(newState)
   }
 
@@ -187,7 +194,7 @@ class App extends Component {
         {/* want to add styling to header to force it to stay at the top of the page and if possible reduce it's size on scroll */}
         <Header/>
         {/* MessagesViewer will contain the majority of component imports so I can probably handle most of the api calls there */}
-        <MessagesViewer dismissReading={this.dismissReading.bind(this)} setReading={this.setReading.bind(this)} deleteMessage={this.deleteMessage.bind(this)} markReadUnread={this.markReadUnread.bind(this)} addRemoveLabel={this.addRemoveLabel.bind(this)} checkAll={this.checkAll.bind(this)} starred={this.starred.bind(this)} messages={this.state.messages} />
+        <MessagesViewer newMessage={this.state.newMessage} dismissReading={this.dismissReading.bind(this)} setReading={this.setReading.bind(this)} deleteMessage={this.deleteMessage.bind(this)} markReadUnread={this.markReadUnread.bind(this)} addRemoveLabel={this.addRemoveLabel.bind(this)} checkAll={this.checkAll.bind(this)} starred={this.starred.bind(this)} messages={this.state.messages} />
       </div>
     )
   }
