@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Collection, CollectionItem, Row, Col, Collapsible, Button } from 'react-materialize'
+import { Collection, Row, Col, Button } from 'react-materialize'
 import ViewerToolbar from '../viewer-toolbar/viewer-toolbar'
 import MessagesList from '../messages-list/messages-list'
 import MessageReader from '../message-reader/message-reader'
@@ -9,7 +9,7 @@ class MessagesViewer extends Component {
 
 
   render(){
-    const { messages, starred, checkAll, addRemoveLabel, markReadUnread, deleteMessage, setReading, dismissReading, newMessage } = this.props
+    const { messages, starred, checkAll, addRemoveLabel, markReadUnread, deleteMessage, setReading, dismissReading, newMessage, composeMessage } = this.props
     const reading = messages.filter((message)=>(message.reading))[0] || false
     const labels = ['Dev', 'Personal']
     return(
@@ -24,8 +24,8 @@ class MessagesViewer extends Component {
           <Col s={1} m={1} l={1} xl={1}>Star:</Col>
           <Col s={10} m={10} l={10} xl={10}>Subject:</Col>
         </Row>
-        {reading ? <Collapsible><MessageReader dismissReading={dismissReading} messages={messages}/></Collapsible> : <hr/>}
-        {newMessage ? <ComposeMessage/> : <Button className='align-right'>New Message</Button>}
+        {reading ? <MessageReader dismissReading={dismissReading} messages={messages}/> : <hr/>}
+        {newMessage ? <ComposeMessage composeMessage={composeMessage}/> : <Button className='align-right' onClick={()=>composeMessage(true, false)}>New Message</Button>}
         {
           messages.map((message, idx)=>(
             <MessagesList setReading={setReading} starred={starred} checkAll={checkAll} key={idx} message={message}/>

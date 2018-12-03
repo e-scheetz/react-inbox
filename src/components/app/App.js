@@ -13,13 +13,32 @@ class App extends Component {
   }
 
   async componentDidMount() {
-    const response = await fetch('http://localhost:8082/api/messages')
+    const response = await fetch('http://collectiveapi.herokuapp.com/api/messages')
     const json = await response.json()
     this.setState({
       ...this.state,
       messages: json
     })
     this.checkedOrIndeterminate(this.state.messages)
+  }
+
+  async componentDidChange(method, data) {
+    const response = await fetch('http://collectiveapi.herokuapp.com/api/messages', {
+      method: "POST", // *GET, POST, PUT, DELETE, etc.
+      mode: "cors", // no-cors, cors, *same-origin
+      cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
+      credentials: "same-origin", // include, *same-origin, omit
+      headers: {
+          "Content-Type": "application/json; charset=utf-8",
+          // "Content-Type": "application/x-www-form-urlencoded",
+      },
+      redirect: "follow", // manual, *follow, error
+      referrer: "no-referrer", // no-referrer, *client
+      body: JSON.stringify(data), // body data type must match "Content-Type" header
+    })
+    const json = await response.json()
+    console.log(json)
+    this.componentDidMount()
   }
 
   starred(ID){
@@ -32,6 +51,7 @@ class App extends Component {
       ...this.state,
       messages: newState
     })
+    // this.componentDidChange('PATCH', changedVariable, 'star')
     // console.log(newState)
   }
 
@@ -188,13 +208,45 @@ class App extends Component {
     })
   }
 
+  composeMessage(bool, values){
+    console.log('event fired')
+    // add functionality to grab new message data in the else statement
+    // this is why there is an else statement instead of simply setting state with bool
+    // false will grab the values, reset them and pass the values into an object to be added into the messages array
+    if(bool){
+      this.setState({
+        ...this.state,
+        newMessage: bool
+      })
+    }else if (values && values.body !== '' && values.subject !== ''){
+      const newMessage = {
+        body: values.body,
+        id: this.state.messages.length+1,
+        labels: [],
+        read: false,
+        starred: false,
+        subject: values.subject
+      }
+      this.setState({
+        messages: [...this.state.messages, newMessage],
+        newMessage: bool
+      })
+      this.componentDidChange('POST', newMessage)
+    }else{
+      this.setState({
+        ...this.state,
+        newMessage: bool
+      })
+    }
+  }
+
   render() {
     return (
       <div className="App">
         {/* want to add styling to header to force it to stay at the top of the page and if possible reduce it's size on scroll */}
         <Header/>
         {/* MessagesViewer will contain the majority of component imports so I can probably handle most of the api calls there */}
-        <MessagesViewer newMessage={this.state.newMessage} dismissReading={this.dismissReading.bind(this)} setReading={this.setReading.bind(this)} deleteMessage={this.deleteMessage.bind(this)} markReadUnread={this.markReadUnread.bind(this)} addRemoveLabel={this.addRemoveLabel.bind(this)} checkAll={this.checkAll.bind(this)} starred={this.starred.bind(this)} messages={this.state.messages} />
+        <MessagesViewer newMessage={this.state.newMessage} composeMessage={this.composeMessage.bind(this)} dismissReading={this.dismissReading.bind(this)} setReading={this.setReading.bind(this)} deleteMessage={this.deleteMessage.bind(this)} markReadUnread={this.markReadUnread.bind(this)} addRemoveLabel={this.addRemoveLabel.bind(this)} checkAll={this.checkAll.bind(this)} starred={this.starred.bind(this)} messages={this.state.messages} />
       </div>
     )
   }

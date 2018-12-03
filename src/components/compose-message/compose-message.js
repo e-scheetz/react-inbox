@@ -1,30 +1,52 @@
 import React, { Component } from 'react'
-import { CollapsibleItem, Row, Col, Input, Button } from 'react-materialize'
+import { CollectionItem, Row, Col, Input, Button } from 'react-materialize'
 
 class ComposeMessage extends Component {
+  constructor(props){
+    super(props)
+    this.state = {
+      subject: '',
+      body: ''
+    }
+  }
+
+  onInputChange = (e) => {
+    e.preventDefault()
+    this.setState({
+      ...this.state,
+      [e.target.name]: e.target.value
+    })
+  }
+
+  reset = (bool) => {
+    this.props.composeMessage(bool, {subject: this.state.subject, body: this.state.body})
+    this.setState({subject: '', body: ''})
+  }
+
   render(){
     return(
-      <CollapsibleItem header='Compose New Message:'>
+      <CollectionItem header=''>
         <Row>
           <Col s={12} m={12} l={12} xl={12}>
-            <Input type='text'/>
+            <h5>Compose New Message:</h5>
           </Col>
         </Row>
         <Row>
-          <Col s={12} m={12} l={12} xl={12}>
-            <Input type='textarea'/>
-          </Col>
+          <Input name='subject' value={this.state.subject} onChange={this.onInputChange} label="Subject" s={12} m={12} l={12} xl={12} type='text'/>
         </Row>
         <Row>
-          <Col s={8} m={8} l={8} xl={8}></Col>
-          <Col s={2} m={2} l={2} xl={2}>
-            <Button>Discard</Button>
+          <Input name='body' value={this.state.body} onChange={this.onInputChange} label="Body" s={12} m={12} l={12} xl={12} type='textarea'/>
+        </Row>
+        <Row>
+          <Col s={6} m={6} l={6} xl={6}></Col>
+          <Col s={3} m={3} l={3} xl={3}>
+            <Button onClick={()=>this.reset(false)}>Discard</Button>
           </Col>
-          <Col s={2} m={2} l={2} xl={2}>
-            <Button>Send</Button>
+          <Col s={3} m={3} l={3} xl={3}>
+            <Button onClick={()=>this.reset(false)}>Send</Button>
           </Col>
         </Row>
-      </CollapsibleItem>
+      </CollectionItem>
     )
   }
 }
