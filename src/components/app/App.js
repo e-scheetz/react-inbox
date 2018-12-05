@@ -105,20 +105,26 @@ class App extends Component {
   }
 
   checkedOrIndeterminate(currentState){
+    // grab elements to apply attributes to
     const checkBox = document.getElementById('checkAll')
     const disablerInputs = document.getElementsByName('group2')
+    // filter messages by selected
     const selected = currentState.filter((message)=>message.selected)
+    // if the following two values are false, the toolbar selector should be unchecked and if either is true (both cannot be true), the respective state of checked or indeterminate should be applied
     const checked = selected.length === currentState.length ? true : false
     const indeterminate = selected.length > 0 && !checked ? true : false
+    // if checked, set indeterminate to false (to prevent weird graphical bugs--rare but I was getting some unusual glitches without that line and the timeout line), remove that attribute, and apply the new attribute (with a slight delay to work around an odd materialize bug), and remove disabled attribute from toolbar elements if it exists.
     if(checked){
       checkBox.indeterminate = false
       checkBox.removeAttribute('indeterminate')
       setTimeout(function(){ checkBox.checked = true }, 1)
       disablerInputs.forEach((input)=>input.removeAttribute('disabled'))
+      // if indeterminate, removed checked attribute and apply indeterminate attribute and enable toolbar
     }else if (indeterminate){
       checkBox.removeAttribute('checked')
       checkBox.indeterminate = true
       disablerInputs.forEach((input)=>input.removeAttribute('disabled'))
+      // if both are false, remove both attributes to ensure box is unchecked
     }else{
       checkBox.indeterminate = false
       checkBox.checked = false
