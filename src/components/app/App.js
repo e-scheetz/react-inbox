@@ -19,7 +19,21 @@ class App extends Component {
       ...this.state,
       messages: json
     })
+    this.setAllAsUnsel()
     this.checkedOrIndeterminate(this.state.messages)
+  }
+
+  setAllAsUnsel(){
+    const newState = this.state.messages.map((message)=>{
+      return {
+        ...message,
+        selected: false
+      }
+    }).sort((a, b)=>a.id - b.id)
+    this.setState({
+      ...this.state,
+      messages: newState
+    })
   }
 
   async componentDidChange(method, data) {
@@ -45,7 +59,7 @@ class App extends Component {
     const changedVariable = this.state.messages.filter((message)=>(message.id === ID))[0]
     changedVariable.starred = !changedVariable.starred
     const remainingArr = this.state.messages.filter((message)=>(message.id !== ID))
-    const newState = [...remainingArr, changedVariable].sort((a, b)=>{return a.id > b.id})
+    const newState = [...remainingArr, changedVariable].sort((a, b)=>a.id - b.id)
     // api patch
     this.setState({
       ...this.state,
@@ -126,7 +140,7 @@ class App extends Component {
         }
       })
       const remainingArr = this.state.messages.filter((message)=>!message.selected)
-      const newState = [...remainingArr, ...newList].sort((a, b)=>{return a.id > b.id})
+      const newState = [...remainingArr, ...newList].sort((a, b)=>a.id - b.id)
       this.setState({
         ...this.state,
         messages: newState
@@ -140,7 +154,7 @@ class App extends Component {
         }
       })
       const remainingArr = this.state.messages.filter((message)=>!message.selected)
-      const newState = [...remainingArr, ...newList].sort((a, b)=>{return a.id > b.id})
+      const newState = [...remainingArr, ...newList].sort((a, b)=>a.id - b.id)
       this.setState({
         ...this.state,
         messages: newState
@@ -157,7 +171,7 @@ class App extends Component {
       }
     })
     const remainder = this.state.messages.filter((message)=>!message.selected)
-    const newState = [...remainder, ...filteredMessages].sort((a, b)=>{return a.id > b.id})
+    const newState = [...remainder, ...filteredMessages].sort((a, b)=>a.id - b.id)
     this.setState({
       ...this.state,
       messages: newState
@@ -180,10 +194,10 @@ class App extends Component {
     if(oldReading){
       oldReading.reading = false
       newReading.reading = true
-      newState = [...remainder, newReading, oldReading].sort((a, b)=>{return a.id > b.id})
+      newState = [...remainder, newReading, oldReading].sort((a, b)=>a.id - b.id)
     }else{
       newReading.reading = true
-      newState = [...remainder, newReading].sort((a, b)=>{return a.id > b.id})
+      newState = [...remainder, newReading].sort((a, b)=>a.id - b.id)
     }
     this.setState({
       ...this.state,
@@ -201,7 +215,7 @@ class App extends Component {
       }
     })
     const remainder = this.state.messages.filter((message)=>!message.reading)
-    const newState = [...remainder, ...returnVal].sort((a, b)=>{return a.id > b.id})
+    const newState = [...remainder, ...returnVal].sort((a, b)=>a.id - b.id)
     this.setState({
       ...this.state,
       messages: newState
